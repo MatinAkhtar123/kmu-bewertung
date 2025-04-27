@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewertungsverfahren KMU</title>
+</head>
+<body>
+    <h1>Bewertungsverfahren für KI-Einsatz in KMUs</h1>
+
+    <form id="bewertungForm">
+        <div>
+            <label>Digitalisierungsgrad:</label>
+            <select name="digitalisierung">
+                <option value="1">1 - Sehr schlecht</option>
+                <option value="2">2</option>
+                <option value="3">3 - Mittel</option>
+                <option value="4">4</option>
+                <option value="5">5 - Sehr gut</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Datenverfügbarkeit:</label>
+            <select name="daten">
+                <option value="1">1 - Keine</option>
+                <option value="2">2</option>
+                <option value="3">3 - Teilweise</option>
+                <option value="4">4</option>
+                <option value="5">5 - Sehr gut</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Mitarbeiterkompetenz:</label>
+            <select name="mitarbeiter">
+                <option value="1">1 - Keine Kenntnisse</option>
+                <option value="2">2</option>
+                <option value="3">3 - Grundkenntnisse</option>
+                <option value="4">4</option>
+                <option value="5">5 - Experten</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Management-Unterstützung:</label>
+            <select name="management">
+                <option value="1">1 - Keine Unterstützung</option>
+                <option value="2">2</option>
+                <option value="3">3 - Neutral</option>
+                <option value="4">4</option>
+                <option value="5">5 - Volle Unterstützung</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Finanzielle Ressourcen:</label>
+            <select name="finanzen">
+                <option value="1">1 - Keine Ressourcen</option>
+                <option value="2">2</option>
+                <option value="3">3 - Eingeschränkt</option>
+                <option value="4">4</option>
+                <option value="5">5 - Ausreichend</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Projektpotenzial:</label>
+            <select name="projekt">
+                <option value="1">1 - Kein Anwendungsfall</option>
+                <option value="2">2</option>
+                <option value="3">3 - Möglich</option>
+                <option value="4">4</option>
+                <option value="5">5 - Mehrere Anwendungsfälle</option>
+            </select>
+        </div>
+
+        <br>
+        <button type="button" onclick="berechneDurchschnitt()">Auswertung starten</button>
+    </form>
+
+    <h2 id="ergebnis"></h2>
+
+    <script>
+        function berechneDurchschnitt() {
+            const form = document.getElementById('bewertungForm');
+            const daten = new FormData(form);
+
+            let summe = 0;
+            let anzahl = 0;
+            for (let wert of daten.values()) {
+                summe += parseInt(wert);
+                anzahl++;
+            }
+
+            const durchschnitt = summe / anzahl;
+            let text = '';
+
+            if (durchschnitt < 2.5) {
+                text = "Großer Unterstützungsbedarf 🚨";
+            } else if (durchschnitt < 4) {
+                text = "Potenzial vorhanden, Vorbereitung nötig ⚡";
+            } else {
+                text = "Sehr gute Ausgangslage für KI-Projekte 🚀";
+            }
+
+            document.getElementById('ergebnis').innerText = `Durchschnitt: ${durchschnitt.toFixed(2)} - ${text}`;
+        }
+    </script>
+
+</body>
+</html>
