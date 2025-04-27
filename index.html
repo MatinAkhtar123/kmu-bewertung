@@ -3,31 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bewertungsverfahren KMU</title>
+    <title>Bewertungsverfahren KI-Einsatz in KMU</title>
 </head>
 <body>
-    <h1>Bewertungsverfahren für KI-Einsatz in KMUs</h1>
+    <h1>Bewertungsverfahren: KI-Einsatz in kleinen und mittelständischen Bauunternehmen</h1>
 
     <form id="bewertungForm">
         <div>
             <label>Digitalisierungsgrad:</label>
             <select name="digitalisierung">
-                <option value="1">1 - Sehr schlecht</option>
+                <option value="1">1 - Sehr gering</option>
                 <option value="2">2</option>
                 <option value="3">3 - Mittel</option>
                 <option value="4">4</option>
-                <option value="5">5 - Sehr gut</option>
+                <option value="5">5 - Sehr hoch</option>
             </select>
         </div>
 
         <div>
             <label>Datenverfügbarkeit:</label>
             <select name="daten">
-                <option value="1">1 - Keine</option>
+                <option value="1">1 - Keine Datenbasis</option>
                 <option value="2">2</option>
-                <option value="3">3 - Teilweise</option>
+                <option value="3">3 - Teilweise vorhanden</option>
                 <option value="4">4</option>
-                <option value="5">5 - Sehr gut</option>
+                <option value="5">5 - Umfangreiche und aktuelle Daten</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Datenqualität:</label>
+            <select name="datenqualitaet">
+                <option value="1">1 - Sehr schlecht</option>
+                <option value="2">2</option>
+                <option value="3">3 - Durchschnittlich</option>
+                <option value="4">4</option>
+                <option value="5">5 - Sehr hoch</option>
             </select>
         </div>
 
@@ -38,16 +49,16 @@
                 <option value="2">2</option>
                 <option value="3">3 - Grundkenntnisse</option>
                 <option value="4">4</option>
-                <option value="5">5 - Experten</option>
+                <option value="5">5 - Fundiertes Wissen</option>
             </select>
         </div>
 
         <div>
-            <label>Management-Unterstützung:</label>
-            <select name="management">
+            <label>Unterstützung durch Unternehmensführung:</label>
+            <select name="fuehrung">
                 <option value="1">1 - Keine Unterstützung</option>
                 <option value="2">2</option>
-                <option value="3">3 - Neutral</option>
+                <option value="3">3 - Teilweise Unterstützung</option>
                 <option value="4">4</option>
                 <option value="5">5 - Volle Unterstützung</option>
             </select>
@@ -56,55 +67,55 @@
         <div>
             <label>Finanzielle Ressourcen:</label>
             <select name="finanzen">
-                <option value="1">1 - Keine Ressourcen</option>
+                <option value="1">1 - Sehr eingeschränkt</option>
                 <option value="2">2</option>
-                <option value="3">3 - Eingeschränkt</option>
+                <option value="3">3 - Durchschnittlich</option>
                 <option value="4">4</option>
-                <option value="5">5 - Ausreichend</option>
-            </select>
-        </div>
-
-        <div>
-            <label>Projektpotenzial:</label>
-            <select name="projekt">
-                <option value="1">1 - Kein Anwendungsfall</option>
-                <option value="2">2</option>
-                <option value="3">3 - Möglich</option>
-                <option value="4">4</option>
-                <option value="5">5 - Mehrere Anwendungsfälle</option>
+                <option value="5">5 - Sehr gut</option>
             </select>
         </div>
 
         <br>
-        <button type="button" onclick="berechneDurchschnitt()">Auswertung starten</button>
+        <button type="button" onclick="berechneGewichteteSumme()">Auswertung starten</button>
     </form>
 
     <h2 id="ergebnis"></h2>
 
     <script>
-        function berechneDurchschnitt() {
+        function berechneGewichteteSumme() {
             const form = document.getElementById('bewertungForm');
             const daten = new FormData(form);
 
-            let summe = 0;
-            let anzahl = 0;
-            for (let wert of daten.values()) {
-                summe += parseInt(wert);
-                anzahl++;
+            const gewichtung = {
+                digitalisierung: 0.2,
+                daten: 0.2,
+                datenqualitaet: 0.2,
+                mitarbeiter: 0.15,
+                fuehrung: 0.15,
+                finanzen: 0.1
+            };
+
+            let gesamt = 0;
+
+            for (let [key, wert] of daten.entries()) {
+                gesamt += parseInt(wert) * gewichtung[key];
             }
 
-            const durchschnitt = summe / anzahl;
             let text = '';
 
-            if (durchschnitt < 2.5) {
-                text = "Großer Unterstützungsbedarf 🚨";
-            } else if (durchschnitt < 4) {
-                text = "Potenzial vorhanden, Vorbereitung nötig ⚡";
+            if (gesamt < 2.0) {
+                text = "Sehr geringer KI-Reifegrad: KI-Projekte derzeit nicht sinnvoll möglich.";
+            } else if (gesamt < 3.0) {
+                text = "Niedriger KI-Reifegrad: Grundlagen müssen geschaffen werden.";
+            } else if (gesamt < 4.0) {
+                text = "Mittlerer KI-Reifegrad: KI-Projekte sind möglich, weitere Vorbereitung empfohlen.";
+            } else if (gesamt <= 4.5) {
+                text = "Hoher KI-Reifegrad: Sehr gute Voraussetzungen für KI-Projekte.";
             } else {
-                text = "Sehr gute Ausgangslage für KI-Projekte 🚀";
+                text = "Exzellenter KI-Reifegrad: Ideale Ausgangslage für KI-Implementierungen.";
             }
 
-            document.getElementById('ergebnis').innerText = `Durchschnitt: ${durchschnitt.toFixed(2)} - ${text}`;
+            document.getElementById('ergebnis').innerText = `Gesamtpunktzahl: ${gesamt.toFixed(2)}\n${text}`;
         }
     </script>
 
